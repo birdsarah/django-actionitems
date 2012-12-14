@@ -1,0 +1,30 @@
+{% load url from future %}
+{% load i18n %}
+
+<h1>{% trans 'Add Action Item' %}</h1>
+
+<a href="{% url 'actionitems_add' %}?actionitems_origin={{ object.pk }}">{% trans 'Add Action Item' %}</a>
+<table>
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Description</th>
+            <th>Responsible</th>
+            <th>Deadline</th>
+            <th>Done</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for actionitem in actionitems %}
+        <tr>
+            <td><a href="{% url 'actionitems_edit' actionitem.id %}">{{ actionitem.id }}</a></td>
+            <td>{{ actionitem.title }}</td>
+            <td>{{ actionitem.description }}</td>
+            <td>{{ actionitem.responsible }}</td>
+            <td>{{ actionitem.deadline }}</td>
+            <td>{{ actionitem.is_done }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>

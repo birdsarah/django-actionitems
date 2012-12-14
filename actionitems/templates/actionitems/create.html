@@ -1,0 +1,9 @@
+{% load url from future %}
+{% load i18n %}
+
+<a class="actionitem-close button" href="{% url 'actionitems_list' %}">{% trans 'Close' %}</a>
+
+<form class="actionitem-form" method="POST">{% csrf_token %}
+    {{ form.as_p }}
+    <input class="actionitem-form button" type="submit" value="{% trans 'Submit' %}" />
+</form>
