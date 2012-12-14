@@ -1,4 +1,4 @@
-from setuptools import setup
+from setuptools import setup, find_packages
 import os
 
 
@@ -24,5 +24,6 @@ setup(
         'django>=1.4',
     ],
     include_package_data=True,
+    packages=find_packages(),
     zip_safe=False
 )
