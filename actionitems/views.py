@@ -37,6 +37,9 @@ class ActionItemUpdate(UpdateView):
     template_name = 'actionitems/edit.html'
     form_class = ActionItemUpdateForm
 
+    def get_success_url(self):
+        return redirect('actionitems_edit', pk=self.kwargs.get('pk'))
+
     def post(self, request, *args, **kwargs):
         actionitem = ActionItem.objects.get(pk=kwargs.get('pk'))
         self.handle_done(request, actionitem)
