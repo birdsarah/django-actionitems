@@ -12,4 +12,4 @@ class ActionItemCreateForm(ModelForm):
 class ActionItemUpdateForm(ModelForm):
     class Meta:
         model = ActionItem
-        exclude = ('completed_on', 'created_on', 'updated_on', 'manager')
+        exclude = ('completed_on', 'created_on', 'updated_on', 'origin', 'manager')

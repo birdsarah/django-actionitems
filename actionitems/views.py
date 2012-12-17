@@ -22,7 +22,6 @@ class ActionItemCreate(CreateView):
 
     def get(self, request, *args, **kwargs):
         self.origin = request.GET.get('actionitems_origin')
-        print self.origin
         return super(ActionItemCreate, self).get(request, *args, **kwargs)
 
     def get_initial(self):

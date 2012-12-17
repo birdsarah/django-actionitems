@@ -13,6 +13,7 @@
             <th>Responsible</th>
             <th>Deadline</th>
             <th>Done</th>
+            <th>Origin</th>
         </tr>
     </thead>
     <tbody>
@@ -24,6 +25,7 @@
             <td>{{ actionitem.responsible }}</td>
             <td>{{ actionitem.deadline }}</td>
             <td>{{ actionitem.is_done }}</td>
+            <td>{{ actionitem.origin.id }}</td>
         </tr>
     {% endfor %}
     </tbody>
