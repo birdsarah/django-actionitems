@@ -8,8 +8,7 @@
     <thead>
         <tr>
             <th>#</th>
-            <th>Title</th>
-            <th>Description</th>
+            <th>Excerpt</th>
             <th>Responsible</th>
             <th>Deadline</th>
             <th>Done</th>
@@ -21,7 +20,6 @@
         <tr>
             <td><a href="{% url 'actionitems_edit' actionitem.id %}">{{ actionitem.id }}</a></td>
             <td>{{ actionitem.title }}</td>
-            <td>{{ actionitem.description }}</td>
             <td>{{ actionitem.responsible }}</td>
             <td>{{ actionitem.deadline }}</td>
             <td>{{ actionitem.is_done }}</td>
