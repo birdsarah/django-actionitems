@@ -8,7 +8,7 @@ from actionitems.settings import *
 
 
 class ActionItem(models.Model):
-    description = models.TextField(null=True, blank=True)
+    description = models.TextField()
     responsible = models.CharField(max_length=100)
     deadline = models.DateField(null=True, blank=True)
     completed_on = models.DateField(null=True, blank=True)
