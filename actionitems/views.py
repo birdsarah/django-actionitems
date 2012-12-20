@@ -25,7 +25,7 @@ class ActionItemAdd(CreateView):
     origin = None
 
     def get(self, request, *args, **kwargs):
-        self.origin = self.get_origin()
+        self.origin = self.get_origin(request, *args, **kwargs)
         return super(ActionItemAdd, self).get(request, *args, **kwargs)
 
     def get_initial(self):
@@ -34,7 +34,7 @@ class ActionItemAdd(CreateView):
             initial['origin'] = self.origin
         return initial
 
-    def get_origin(self):
+    def get_origin(self, request, *args, **kwargs):
         # Expect an overriding method get_origin method to set origin
         if USE_ORIGIN_MODEL and self.origin == None:
             raise ImproperlyConfigured(u"Please write a get_origin method that returns the origin id")
