@@ -2,11 +2,13 @@ from django.core.urlresolvers import reverse_lazy, reverse
 from django.views.generic import ListView
 from django.shortcuts import redirect
 from django.views.generic.edit import CreateView, UpdateView
+from django.core.exceptions import ImproperlyConfigured
 from datetime import date
 
 from models import ActionItem
-from forms import ActionItemCreateForm, ActionItemUpdateForm
+from forms import ActionItemAddForm, ActionItemUpdateForm
 
+from actionitems.settings import USE_ORIGIN_MODEL
 
 class ActionItemList(ListView):
     model = ActionItem
@@ -14,56 +16,52 @@ class ActionItemList(ListView):
     context_object_name = 'actionitems'
 
 
-class ActionItemCreate(CreateView):
+class ActionItemAdd(CreateView):
     model = ActionItem
     template_name = 'actionitems/create.html'
+    form_class = ActionItemAddForm
     success_url = reverse_lazy('actionitems_list')
-    form_class = ActionItemCreateForm
+    
+    origin = None
 
     def get(self, request, *args, **kwargs):
-        self.origin = request.GET.get('actionitems_origin')
-        return super(ActionItemCreate, self).get(request, *args, **kwargs)
+        self.origin = self.get_origin()
+        return super(ActionItemAdd, self).get(request, *args, **kwargs)
 
     def get_initial(self):
-        initial = super(ActionItemCreate, self).get_initial().copy()
+        initial = super(ActionItemAdd, self).get_initial().copy()
         if not self.request.POST:
             initial['origin'] = self.origin
         return initial
 
+    def get_origin(self):
+        # Expect an overriding method get_origin method to set origin
+        if USE_ORIGIN_MODEL and self.origin == None:
+            raise ImproperlyConfigured(u"Please write a get_origin method that returns the origin id")
+        return self.origin
+            
 
 class ActionItemUpdate(UpdateView):
     model = ActionItem
-    template_name = 'actionitems/edit.html'
+    template_name = 'actionitems/update.html'
     form_class = ActionItemUpdateForm
 
+    def get(self, request, *args, **kwargs):
+        if self.kwargs.get('sync', None) == 'sync':
+            self.sync(ActionItem.objects.get(pk=self.kwargs.get('pk')))
+        return super(ActionItemUpdate, self).post(request, *args, **kwargs)
+
     def get_success_url(self):
-        return redirect('actionitems_edit', pk=self.kwargs.get('pk'))
+        return redirect('actionitems_update', pk=self.kwargs.get('pk'))
 
     def post(self, request, *args, **kwargs):
         actionitem = ActionItem.objects.get(pk=kwargs.get('pk'))
-        self.handle_done(request, actionitem)
         return super(ActionItemUpdate, self).post(request, *args, **kwargs)
-
-    def handle_done(self, request, actionitem):
-        f = ActionItemUpdateForm(request.POST, instance=actionitem)
-        actionitem = f.save(commit=False)
-        if not actionitem.completed_on and 'done' in request.POST:
-            actionitem.completed_on = date.today()
-        if actionitem.completed_on and not 'done' in request.POST:
-            actionitem.completed_on = None
-        actionitem.save()
-
-
-class ActionItemSync(UpdateView):
-
-    def get(self, request, *args, **kwargs):
-        instancepk = kwargs.get('pk')
-        self.sync(ActionItem.objects.get(pk=instancepk))
-        return redirect('actionitems_edit', pk=instancepk)
-
+        
     def sync(self, actionitem):
         f = ActionItemUpdateForm(instance=actionitem)
         actionitem = f.save(commit=False)
         # TODO In the future this will pull in data from external managers
         actionitem.description += ' sync'
         actionitem.save()
+        return actionitem

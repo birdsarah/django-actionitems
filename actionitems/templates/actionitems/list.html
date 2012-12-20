@@ -1,9 +1,13 @@
+{% extends "actionitems/base.html" %}
 {% load url from future %}
 {% load i18n %}
 
-<h1>{% trans 'Add Action Item' %}</h1>
+{% block 'actionitems_head' %}
+    <h2>{% trans 'Action Items' %}</h2>
+    <p><a href="{% url 'actionitems_add' %}">{% trans 'Add Action Item' %}</a></p>
+{% endblock 'actionitems_head' %}
 
-<a href="{% url 'actionitems_add' %}?actionitems_origin={{ object.pk }}">{% trans 'Add Action Item' %}</a>
+{% block 'actionitems_content' %}
 <table>
     <thead>
         <tr>
@@ -18,13 +22,15 @@
     <tbody>
     {% for actionitem in actionitems %}
         <tr>
-            <td><a href="{% url 'actionitems_edit' actionitem.id %}">{{ actionitem.id }}</a></td>
+            <td><a href="{% url 'actionitems_update' actionitem.id %}">{{ actionitem.id }}</a></td>
             <td>{{ actionitem.title }}</td>
             <td>{{ actionitem.responsible }}</td>
             <td>{{ actionitem.deadline }}</td>
-            <td>{{ actionitem.is_done }}</td>
+            <td>{{ actionitem.done }}</td>
             <td>{{ actionitem.origin.id }}</td>
         </tr>
     {% endfor %}
     </tbody>
 </table>
+{% endblock 'actionitems_content' %}
+

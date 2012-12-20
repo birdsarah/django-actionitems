@@ -6,7 +6,7 @@ setup(
     author="Sarah Bird",
     author_email="sarah@aptivate.org",
     name='django-actionitems',
-    version='1.0',
+    version='1.1',
     description='Action items for Django',
     long_description=open(os.path.join(os.path.dirname(__file__),
         'README.md')).read(),
@@ -24,6 +24,6 @@ setup(
         'django>=1.4',
     ],
     include_package_data=True,
-    packages=find_packages(),
+    packages=['actionitems'],
     zip_safe=False
 )

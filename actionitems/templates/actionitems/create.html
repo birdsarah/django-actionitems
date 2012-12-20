@@ -1,9 +1,15 @@
+{% extends "actionitems/base.html" %}
 {% load url from future %}
 {% load i18n %}
 
-<a class="actionitem-close button" href="{% url 'actionitems_list' %}">{% trans 'Close' %}</a>
+{% block 'actionitems_head' %}
+    <p><a class="actionitem-close button" href="{% url 'actionitems_list' %}">{% trans 'Close' %}</a></p>
+{% endblock 'actionitems_head' %}
 
-<form class="actionitem-form" method="POST">{% csrf_token %}
-    {{ form.as_p }}
-    <input class="actionitem-form button" type="submit" value="{% trans 'Submit' %}" />
-</form>
+{% block 'actionitems_content' %}
+    {{ actionitem.id }}
+   <form class="actionitem-form" action="{% url 'actionitems_add' %}" method="POST">{% csrf_token %}
+        {{ form.as_p }}
+        <p><input class="actionitem-form button" type="submit" value="{% trans 'Submit' %}" /></p>
+    </form>
+{% endblock 'actionitems_content' %}

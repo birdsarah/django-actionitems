@@ -1,0 +1,27 @@
+{% extends "actionitems/base.html" %}
+{% load url from future %}
+{% load i18n %}
+
+{% block 'actionitems_head' %}
+    <p><a class="actionitem-close button" href="{% url 'actionitems_list' %}">{% trans 'Close' %}</a></p>
+{% endblock 'actionitems_head' %}
+
+{% comment %}
+    If handling internally display an editable form, else display task information and a sync option.
+{% endcomment %}
+
+{% block 'actionitems_content' %}
+    {% if 'internal' in actionitem.manager %}
+        <form class="actionitem-form" action="{% url 'actionitems_update' actionitem.id %}" method="POST">{% csrf_token %}
+            {{ form.as_p }}
+            <p><input class="actionitem-form button" type="submit" value="{% trans 'Save' %}" /></p>
+        </form>
+    {% else %}
+        <form class="actionitem-form" action="{% url 'actionitems_sync' actionitem.id %}" method="GET">{% csrf_token %}
+            {% for field in form %}
+                <p>{{ field.label_tag }}: {{ field.value }}</p>
+            {% endfor %}
+            <p><input class="actionitem-form button" type="submit" value="{% trans 'Sync' %}" /></p>
+        </form>
+    {% endif %}
+{% endblock 'actionitems_content' %}
