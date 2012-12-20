@@ -24,6 +24,6 @@ setup(
         'django>=1.4',
     ],
     include_package_data=True,
-    packages=['actionitems'],
+    packages=find_packages(),
     zip_safe=False
 )
