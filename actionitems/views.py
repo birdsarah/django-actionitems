@@ -10,6 +10,7 @@ from forms import ActionItemAddForm, ActionItemUpdateForm
 
 from actionitems.settings import USE_ORIGIN_MODEL
 
+
 class ActionItemList(ListView):
     model = ActionItem
     template_name = 'actionitems/list.html'
@@ -21,7 +22,7 @@ class ActionItemAdd(CreateView):
     template_name = 'actionitems/create.html'
     form_class = ActionItemAddForm
     success_url = reverse_lazy('actionitems_list')
-    
+
     origin = None
 
     def get(self, request, *args, **kwargs):
@@ -36,28 +37,25 @@ class ActionItemAdd(CreateView):
 
     def get_origin(self, request, *args, **kwargs):
         # Expect an overriding method get_origin method to set origin
-        if USE_ORIGIN_MODEL and self.origin == None:
+        if USE_ORIGIN_MODEL and self.origin is None:
             raise ImproperlyConfigured(u"Please write a get_origin method that returns the origin id")
         return self.origin
-            
+
 
 class ActionItemUpdate(UpdateView):
     model = ActionItem
     template_name = 'actionitems/update.html'
     form_class = ActionItemUpdateForm
 
+    def get_success_url(self):
+        return reverse_lazy('actionitems_update', kwargs=self.kwargs)
+
+    # Extra handling for when Sync is used in future
     def get(self, request, *args, **kwargs):
         if self.kwargs.get('sync', None) == 'sync':
             self.sync(ActionItem.objects.get(pk=self.kwargs.get('pk')))
-        return super(ActionItemUpdate, self).post(request, *args, **kwargs)
+        return super(ActionItemUpdate, self).get(request, *args, **kwargs)
 
-    def get_success_url(self):
-        return redirect('actionitems_update', pk=self.kwargs.get('pk'))
-
-    def post(self, request, *args, **kwargs):
-        actionitem = ActionItem.objects.get(pk=kwargs.get('pk'))
-        return super(ActionItemUpdate, self).post(request, *args, **kwargs)
-        
     def sync(self, actionitem):
         f = ActionItemUpdateForm(instance=actionitem)
         actionitem = f.save(commit=False)
