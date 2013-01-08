@@ -1,8 +1,7 @@
-import os
+import pytest
 from datetime import datetime, timedelta
 from django.utils.timezone import utc
-os.environ['DJANGO_SETTINGS_MODULE'] = 'tests.settings'
-
+from helpers import random_string, random_date
 from actionitems.models import ActionItem
 
 
@@ -16,7 +15,8 @@ class TestHandleDone:
     def test_handle_done_2_with_done_null_when_completed_on_has_initial_value(self):
         # With actionitem.done not set, completed on should be forced empty
         actionitem = ActionItem()
-        actionitem.completed_on = datetime.now()
+        actionitem.completed_on = random_date()
+        print actionitem.completed_on
         actionitem = actionitem.handle_done(actionitem)
         assert actionitem.completed_on is None
 
@@ -31,18 +31,38 @@ class TestHandleDone:
     def test_handle_done_4_with_done_set_false_removes_completed_on(self):
         # Completed on should be removed if done is false
         actionitem = ActionItem()
-        completed_on = datetime.now() + timedelta(days=-22)
-        actionitem.completed_on = completed_on
+        actionitem.completed_on = random_date()
         actionitem = actionitem.handle_done(actionitem)
         assert actionitem.completed_on is None
 
     def test_handle_done_5_with_done_true_and_completed_on_in_past_that_completed_on_remains(self):
         # Completed on shouldn't change if nothing has changed
         actionitem = ActionItem()
-        completed_on = datetime.now() + timedelta(days=-32)
-        actionitem.completed_on = completed_on
+        actionitem.completed_on = completed_on = random_date()
         actionitem.done = True
         actionitem = actionitem.handle_done(actionitem)
         assert actionitem.completed_on == completed_on
 
 
+@pytest.mark.django_db
+class TestSave:
+
+    # NB Model.objects.create() is a convenience method for creating an object and saving it all in one step.
+    def test_save_1_confirm_that_handle_done_result_is_saved_with_done_true(self):
+        actionitem = ActionItem.objects.create(done=True)
+        assert actionitem.completed_on is not None
+
+
+class TestTitle:
+
+    def test_title_1_with_short_description(self):
+        description = random_string(30)
+        actionitem = ActionItem()
+        actionitem.description = description
+        assert actionitem.title() == description
+
+    def test_title_2_with_long_description_with_default(self):
+        description = random_string(1000)
+        actionitem = ActionItem()
+        actionitem.description = description
+        assert actionitem.title() == description[:140]
