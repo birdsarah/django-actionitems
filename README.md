@@ -8,15 +8,16 @@ django-actionitems can store a reference to sommething that creates the actionit
 ```python
  ACTIONITEMS_ORIGIN_MODEL = 'publicweb.Decision'
 ``` 
-To include a link to add a decision in your template use:
-```html
- <a href="{% url 'actionitems_add' %}?actionitems_origin={{ object.pk }}">Add Action Item</a> 
-```
-object should match the origin_model, if it doesn't the app will run, but the wrong origin instance will likely be selected. 
+If ACTIONITEMS_ORIGIN_MODEL is set, then django-actionitems expects an origin to be provided when adding a new actionitem. The easiest way to do this is to override the get_origin method ActionItemAdd in views.py.
+The origin is the pk of the object. For example, if our origin is a "decision", we might set origin as follows: 
+```python
+from actionitems.views import ActionItemAdd
 
-Some basic templates are provided as a convenience. You can insert them directly into your existing templates by using the {% include %} template tag. Choose from:
-* actionitems/list.html
-* actionitems/edit.html
-* actionitems/create.html
 
-For list.html to work correctly, you will need to supply actionitems in the view's context.
+class MyCustomActionItemCreate(ActionItemAdd):
+
+    def get_origin(self, request, *args, **kwargs):
+            origin = kwargs.get('decisionpk')
+            return origin
+``` 
+get_origin() is called by the get() method of ActionItemAdd, if you override get(), remember to supply an origin or manually call get_origin()
