@@ -1,5 +1,6 @@
 django-actionitems
 ==================
+[![Build Status](https://travis-ci.org/birdsarah/django-actionitems.png?branch=master)](https://travis-ci.org/birdsarah/django-actionitems)
 
 To use django-actionitems, add the actionitems directory to your project, and add <code>actionitems</code> to your INSTALLED_APPS in your project's settings.py
 
