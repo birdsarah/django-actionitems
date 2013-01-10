@@ -1,9 +1,12 @@
 import pytest
 from datetime import datetime, timedelta
 from django.utils.timezone import utc
+from django.core import management
+from django.conf import settings
+
 from helpers import random_string, random_date
 from actionitems.models import ActionItem
-
+from models import TestModel
 
 class TestHandleDone:
     def test_handle_done_1_with_done_null(self):
@@ -66,3 +69,18 @@ class TestTitle:
         actionitem = ActionItem()
         actionitem.description = description
         assert actionitem.title() == description[:140]
+
+
+@pytest.mark.django_db
+class TestOriginModel:
+
+    def test_origin_model_1_origin_not_present_if_origin_not_used(self):
+        with pytest.raises(AttributeError):
+            ActionItem().origin
+    
+    @pytest.mark.run_with_origin
+    def test_origin_model_2(self):
+        testitem1 = TestModel.objects.create()
+        actionitem2 = ActionItem.objects.create(origin=testitem1)
+        assert actionitem2.origin.pk == testitem1.pk
+

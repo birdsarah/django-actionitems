@@ -3,10 +3,10 @@ from django.forms import ModelForm
 from django.http import HttpRequest
 
 
-class ActionItemAddForm(ModelForm):
+class ActionItemCreateForm(ModelForm):
 
     def __init__(self, *args, **kwargs):
-        super(ActionItemAddForm, self).__init__(*args, **kwargs)
+        super(ActionItemCreateForm, self).__init__(*args, **kwargs)
         self.fields['deadline'].widget.attrs["class"] = 'actionitems-date-widget'
 
     class Meta:

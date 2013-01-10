@@ -8,7 +8,7 @@
 
 {% block 'actionitems_content' %}
     {{ actionitem.id }}
-   <form class="actionitem-form" action="{% url 'actionitems_add' %}" method="POST">{% csrf_token %}
+   <form class="actionitem-form" action="{% url 'actionitems_create' %}" method="POST">{% csrf_token %}
         {{ form.as_p }}
         <p><input class="actionitem-form button" type="submit" value="{% trans 'Submit' %}" /></p>
     </form>

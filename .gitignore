@@ -1,2 +1,4 @@
 *.pyc
 *.sqlite
+.tox
+django_actionitems.egg-info

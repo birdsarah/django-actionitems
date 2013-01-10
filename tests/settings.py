@@ -1,5 +1,13 @@
+import os
+
 USE_TZ = True
 
 DATABASES = {'default': {'ENGINE': 'django.db.backends.sqlite3'}}
-INSTALLED_APPS = ('actionitems')
 
+RUN_WITH_ORIGIN = os.environ.get('RUN_WITH_ORIGIN', False) # comes from tox.ini
+
+if RUN_WITH_ORIGIN:
+    INSTALLED_APPS = ('actionitems', 'tests')
+    ACTIONITEMS_ORIGIN_MODEL='tests.TestModel'
+else:
+    INSTALLED_APPS = ('actionitems')

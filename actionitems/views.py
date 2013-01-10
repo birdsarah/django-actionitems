@@ -6,21 +6,21 @@ from django.core.exceptions import ImproperlyConfigured
 from datetime import date
 
 from models import ActionItem
-from forms import ActionItemAddForm, ActionItemUpdateForm
+from forms import ActionItemCreateForm, ActionItemUpdateForm
 
 from actionitems.settings import USE_ORIGIN_MODEL
 
 
-class ActionItemList(ListView):
+class ActionItemListView(ListView):
     model = ActionItem
     template_name = 'actionitems/list.html'
     context_object_name = 'actionitems'
 
 
-class ActionItemAdd(CreateView):
+class ActionItemCreateView(CreateView):
     model = ActionItem
     template_name = 'actionitems/create.html'
-    form_class = ActionItemAddForm
+    form_class = ActionItemCreateForm
     success_url = reverse_lazy('actionitems_list')
 
     origin = None
@@ -42,7 +42,7 @@ class ActionItemAdd(CreateView):
         return self.origin
 
 
-class ActionItemUpdate(UpdateView):
+class ActionItemUpdateView(UpdateView):
     model = ActionItem
     template_name = 'actionitems/update.html'
     form_class = ActionItemUpdateForm
