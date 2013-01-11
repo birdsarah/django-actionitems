@@ -9,19 +9,19 @@ django-actionitems can store a reference to sommething that creates the actionit
 ```python
  ACTIONITEMS_ORIGIN_MODEL = 'publicweb.Decision'
 ``` 
-If ACTIONITEMS_ORIGIN_MODEL is set, then django-actionitems expects an origin to be provided when adding a new actionitem. The easiest way to do this is to override the get_origin method ActionItemAdd in views.py.
+If ACTIONITEMS_ORIGIN_MODEL is set, then django-actionitems expects an origin to be provided when adding a new actionitem. The easiest way to do this is to override the get_origin method ActionItemCreateView in views.py.
 The origin is the pk of the object. For example, if our origin is a "decision", we might set origin as follows: 
 ```python
-from actionitems.views import ActionItemAdd
+from actionitems.views import ActionItemCreateView
 
 
-class MyCustomActionItemCreate(ActionItemAdd):
+class MyCustomActionItemCreateView(ActionItemCreateView):
 
     def get_origin(self, request, *args, **kwargs):
-            origin = kwargs.get('decisionpk')
+            origin = 'code for acquiring origin objects id' # e.g. origin = kwargs.get('decisionpk')
             return origin
 ``` 
-get_origin() is called by the get() method of ActionItemAdd, if you override get(), remember to supply an origin or manually call get_origin()
+get_origin() is called by the get() method of ActionItemCreateVeiw, if you override get(), remember to supply an origin or manually call get_origin()
 
 running the tests
 =================
