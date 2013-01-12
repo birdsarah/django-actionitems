@@ -6,7 +6,7 @@ setup(
     author="Sarah Bird",
     author_email="sarah@aptivate.org",
     name='django-actionitems',
-    version='1.1',
+    version='1.2',
     description='Action items for Django',
     long_description=open(os.path.join(os.path.dirname(__file__),
         'README.md')).read(),
