@@ -11,3 +11,5 @@ if RUN_WITH_ORIGIN:
     ACTIONITEMS_ORIGIN_MODEL='tests.TestModel'
 else:
     INSTALLED_APPS = ('actionitems')
+
+ROOT_URLCONF = 'actionitems.urls'

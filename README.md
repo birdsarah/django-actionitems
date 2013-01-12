@@ -21,7 +21,7 @@ class MyCustomActionItemCreateView(ActionItemCreateView):
             origin = 'code for acquiring origin objects id' # e.g. origin = kwargs.get('decisionpk')
             return origin
 ``` 
-get_origin() is called by the get() method of ActionItemCreateVeiw, if you override get(), remember to supply an origin or manually call get_origin()
+get_origin() is called by the get_initial() method of ActionItemCreateVeiw, if you override get_initial() for this form, remember to supply an origin or manually call get_origin()
 
 running the tests
 =================

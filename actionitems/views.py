@@ -7,8 +7,8 @@ from datetime import date
 
 from models import ActionItem
 from forms import ActionItemCreateForm, ActionItemUpdateForm
-
-from actionitems.settings import USE_ORIGIN_MODEL
+from sync import sync
+from settings import USE_ORIGIN_MODEL
 
 
 class ActionItemListView(ListView):
@@ -25,14 +25,10 @@ class ActionItemCreateView(CreateView):
 
     origin = None
 
-    def get(self, request, *args, **kwargs):
-        self.origin = self.get_origin(request, *args, **kwargs)
-        return super(ActionItemAdd, self).get(request, *args, **kwargs)
-
     def get_initial(self):
-        initial = super(ActionItemAdd, self).get_initial().copy()
-        if not self.request.POST:
-            initial['origin'] = self.origin
+        initial = super(ActionItemCreateView, self).get_initial().copy()
+        if self.request.method != 'POST':
+            initial['origin'] = self.get_origin(self.request)
         return initial
 
     def get_origin(self, request, *args, **kwargs):
@@ -53,13 +49,5 @@ class ActionItemUpdateView(UpdateView):
     # Extra handling for when Sync is used in future
     def get(self, request, *args, **kwargs):
         if self.kwargs.get('sync', None) == 'sync':
-            self.sync(ActionItem.objects.get(pk=self.kwargs.get('pk')))
-        return super(ActionItemUpdate, self).get(request, *args, **kwargs)
-
-    def sync(self, actionitem):
-        f = ActionItemUpdateForm(instance=actionitem)
-        actionitem = f.save(commit=False)
-        # TODO In the future this will pull in data from external managers
-        actionitem.description += ' sync'
-        actionitem.save()
-        return actionitem
+            sync(ActionItem.objects.get(pk=self.kwargs.get('pk')))
+        return super(ActionItemUpdateView, self).get(request, *args, **kwargs)

@@ -47,10 +47,10 @@ class TestHandleDone:
         assert actionitem.completed_on == completed_on
 
 
-@pytest.mark.django_db
 class TestSave:
 
     # NB Model.objects.create() is a convenience method for creating an object and saving it all in one step.
+    @pytest.mark.django_db
     def test_save_1_confirm_that_handle_done_result_is_saved_with_done_true(self):
         actionitem = ActionItem.objects.create(done=True)
         assert actionitem.completed_on is not None
@@ -71,13 +71,14 @@ class TestTitle:
         assert actionitem.title() == description[:140]
 
 
-@pytest.mark.django_db
+
 class TestOriginModel:
 
     def test_origin_model_1_origin_not_present_if_origin_not_used(self):
         with pytest.raises(AttributeError):
             ActionItem().origin
     
+    @pytest.mark.django_db
     @pytest.mark.run_with_origin
     def test_origin_model_2(self):
         testitem1 = TestModel.objects.create()
