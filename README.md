@@ -27,6 +27,25 @@ migrating with south
 ====================
 A south migration script is included to setup the basic table. However, if you wish to use an origin_model you will need to manually write a second migration script to add this column to your actionitems table.
 
+To do this in a way that brought my second migration under version control, I did the following:
+
+ 1. <code>./manage.py schemamigration actionitems --auto</code>
+ 1. This generated 0002_auto__add_field_actionitem_origin.py, but it placed it in my actionitems directory that was not under version control
+ 1. I moved this migration script, to my main apps migration's directory
+ 1. I added a [dependency](http://south.readthedocs.org/en/latest/dependencies.html):
+
+```python
+
+class Migration(SchemaMigration):
+
+    depends_on = (
+        ("acionitems", "0001_initial.py"),
+    )
+
+    def forwards(self, orm):
+``` 
+I then completed the migration, with <code>./manage.py migrate main</code>
+
 running the tests
 =================
 
