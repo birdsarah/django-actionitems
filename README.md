@@ -25,7 +25,7 @@ get_origin() is called by the get_initial() method of ActionItemCreateVeiw, if y
 
 migrating with south
 ====================
-A south migration script is included to setup the basic table. However, if you wish to use an origin_model you will need to manually write a second migration script to add this column to your actionitems table 
+A south migration script is included to setup the basic table. However, if you wish to use an origin_model you will need to manually write a second migration script to add this column to your actionitems table.
 
 running the tests
 =================
