@@ -31,7 +31,7 @@ To do this in a way that brought my second migration under version control, I di
 
  1. <code>./manage.py schemamigration actionitems --auto</code>
  1. This generated 0002_auto__add_field_actionitem_origin.py, but it placed it in my actionitems directory that was not under version control
- 1. I moved this migration script, to my main apps migration's directory
+ 1. I moved this migration script, to my main app's migrations directory (which is under version control)
  1. I added a [dependency](http://south.readthedocs.org/en/latest/dependencies.html):
 
 ```python
