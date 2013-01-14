@@ -23,6 +23,10 @@ class MyCustomActionItemCreateView(ActionItemCreateView):
 ``` 
 get_origin() is called by the get_initial() method of ActionItemCreateVeiw, if you override get_initial() for this form, remember to supply an origin or manually call get_origin()
 
+migrating with south
+====================
+A south migration script is included to setup the basic table. However, if you wish to use an origin_model you will need to manually write a second migration script to add this column to your actionitems table 
+
 running the tests
 =================
 
