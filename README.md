@@ -39,7 +39,7 @@ To do this in a way that brought my second migration under version control, I di
 class Migration(SchemaMigration):
 
     depends_on = (
-        ("acionitems", "0001_initial.py"),
+        ("actionitems", "0001_initial.py"),
     )
 
     def forwards(self, orm):
